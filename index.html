@@ -1,0 +1,639 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset='utf-8' />
+    <title>加载中</title>
+    <meta name='viewport'
+        content='width=device-width,initial-scale=1.0,minimum-scale=1.0,maximum-scale=1.0,user-scalable=no' />
+    <meta name="renderer" content="webkit" />
+    <meta name='apple-mobile-web-app-capable' content='yes' />
+    <meta name='full-screen' content='true' />
+    <meta name='x5-fullscreen' content='true' />
+    <meta name='360-fullscreen' content='true' />
+    <meta name="laya" screenorientation="landscape" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1" />
+    <meta http-equiv='expires' content='0' />
+    <meta http-equiv="Cache-Control" content="no-siteapp" />
+    <script type="text/javascript" src="/js/config.js"> </script>
+    <script type="text/javascript" src="http://syzy.womai.la/tthaibei/js/load.js"> </script>
+    
+    <div class="img">
+        <img src="http://syzy.womai.la/tthaibei/cache/v3.4/comp5/bg/img_bg.png" alt="">
+        <span class="info">长按图片分享朋友</span>
+        <img id="img" src="" alt="">
+        <span class="close">关闭</span>
+    </div>
+    <div class="gameloadBg" style="display:none;width:100%;height:100%"></div>
+    <div class="gameBg" style="display:none;width:100%;height:100%"></div>
+    <div class="shareInfo cake"
+        style="width:123.5px;height:36.5px;position: fixed;z-index: 1100;right: 40px;top:13%;display:none;background: url(http://syzy.womai.la/tthaibei/cache/v3.4/nn_116.png) 0 0/100% 100%">
+    </div>
+    <div class="loadingBg" style="display:none"></div>
+    <div id="loading" style="display:none">
+        <img class="rodimg center" src="http://syzy.womai.la/tthaibei/cache/v3.4/loading.png">
+        <div class="pai center"></div>
+    </div>
+    <div class="btn" id="btn" data-clipboard-text="要复制的内容" style="cursor:pointer;"></div>
+    <div class="btn" id="room_btn" data-clipboard-text="要复制的内容" data-room="" style="cursor:pointer;display:none"></div>
+    <div class="btn_club" data-clipboard-text="要复制的内容" style="cursor:pointer;"></div>
+    <div id="qrcode" style="display: none; position: fixed; top: 0px; left: 0px; width: 100%; height: 100%; z-index: 111;"><div onclick="hideQrCode()" style="background: rgba(0, 0, 0, 0.5); position: fixed; top: 0px; left: 0px; width: 100%; height: 100%;"></div> <div style="position: relative; width: 64vw; height: 80vw; left: 50%; top: 50%; transform: translate(-50%, -50%); border: 0.0096rem solid rgb(145, 145, 145); border-radius: 0.096rem; transition: display 1s ease 0s; background-color: rgba(255, 255, 255, 0.2);"><div><span style="position: absolute; top: 0.1rem; left: 50%; transform: translateX(-50%); width: 70vw; text-align: center; color: rgb(255, 255, 255); font-size: 18px;">房间二维码</span> <div id="divOne"></div> <img id="imgOne" style="width: 50vw; height: 50vw; box-sizing: border-box; position: absolute; overflow: scroll; padding: 10px; background: rgb(255, 255, 255); border-radius: 4px; left: 50%; top: 48%; transform: translate(-50%, -50%);"> <span style="position: absolute; bottom: 0.25rem; left: 50%; transform: translateX(-50%); width: 70vw; text-align: center; color: rgb(255, 255, 255); font-size: 16px;">长按二维码发送</span></div></div></div>
+    <style>
+        html,
+        body {
+            width: 100%;
+            height: 100%;
+            text-align: center;
+            user-select: none;
+            -webkit-user-select: none;
+            tap-highlight-color: rgba(200, 200, 200, 0);
+            -webkit-tap-highlight-color: rgba(200, 200, 200, 0);
+        }
+
+        .black {
+            background: #000;
+        }
+
+        body {
+            margin: 0;
+            background-repeat: no-repeat;
+            background-size: 100% 100%;
+        }
+
+        .img {
+            text-align: center;
+            width: 80%;
+            height: 80%;
+            top: 10%;
+            left: 9.5%;
+            position: fixed;
+            z-index: 1200;
+            display: none;
+        }
+
+        .img>img {
+            display: inline-block;
+            width: 100%;
+            height: 100%;
+        }
+
+        #img {
+            position: absolute;
+            width: 91%;
+            height: 79%;
+            top: 11%;
+            left: 5%;
+            z-index: 1500;
+        }
+
+        .close {
+            width: 1.2rem;
+            height: 0.4rem;
+            background: #e332c7;
+            color: #fff;
+            padding: 5px 10px;
+            z-index: 1600;
+            font-size: .3rem;
+            top: 7.1rem;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            margin: auto;
+            position: absolute;
+        }
+
+        .btn {
+            position: fixed;
+            top: 9%;
+            right: 0;
+            width: 25px;
+            height: 120px;
+            border-radius: 13px 0 0 13px;
+            z-index: 10000;
+            background-color: #ccc;
+            background-image: url(http://syzy.womai.la/tthaibei/cache/v3.4/fz.png);
+            background-size: 30px 120px;
+            background-position: -4px 0;
+        }
+
+        .btn_club {
+            position: fixed;
+            top: 11%;
+            right: 6%;
+            width: 20%;
+            height: 50px;
+            border-radius: 13px 0 0 13px;
+            display: none;
+            z-index: 10000;
+            background-color: #ccc;
+            opacity: 0;
+        }
+
+        .js-copy {
+            visibility: hidden;
+        }
+
+        ul {
+            list-style-type: none;
+            margin: 0;
+            padding: 0;
+        }
+
+        #copyList {
+            display: none;
+            width: .7rem;
+            height: .3rem;
+            opacity: 1;
+            position: fixed;
+            z-index: 100;
+            top: 0;
+            left: 0;
+            right: 0;
+            margin: 0 auto;
+        }
+
+        .info {
+            color: #2092e7;
+            display: inline-block;
+            font-size: .4rem;
+            top: 4%;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            margin: auto;
+            position: absolute;
+        }
+
+        .img {
+            text-align: center;
+            width: 4rem;
+            height: 8.5rem;
+            position: fixed;
+            z-index: 1200;
+            display: none;
+            position: absolute;
+            left: 0;
+            right: 0;
+            top: -0.5rem;
+            bottom: 0;
+            margin: auto;
+        }
+
+        .img>img {
+            display: inline-block;
+            width: 100%;
+            height: 100%;
+        }
+
+        #img {
+            position: absolute;
+            width: 4rem;
+            height: 6.9rem;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            margin: auto;
+            z-index: 1500;
+        }
+
+        #dialog {
+            position: fixed;
+            width: 300px;
+            height: 150px;
+            padding: 10px;
+            box-sizing: border-box;
+            background: #fff;
+            font-size: 16px;
+            left: 50%;
+            top: 50%;
+            margin-left: -150px;
+            margin-top: -75px;
+            border-radius: 10px;
+            z-index: 99;
+        }
+
+        #dialog .main {
+            word-wrap: break-word;
+            word-break: normal;
+            user-select: text;
+        }
+
+        #dialog .other {
+            text-align: center;
+            margin-top: 30px;
+            position: absolute;
+            bottom: 5%;
+            left: 0;
+            width: 300px;
+            height: 20px;
+        }
+
+        #dialog #diaclose {
+            position: absolute;
+            top: -10px;
+            right: -10px;
+            width: 35px;
+        }
+
+        #dialog #dialogImg {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 300px;
+            height: 150px;
+        }
+
+        #dialog .mains {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 300px;
+            height: 150px;
+        }
+
+        .cake {
+            animation: shake 3s 0s infinite;
+            webkit-animation: shake 3s 0s infinite;
+        }
+
+        @-webkit-keyframes shake {
+
+            from,
+            to {
+                -webkit-transform: translate3d(0, 0, 0);
+                transform: translate3d(0, 0, 0);
+            }
+
+            10%,
+            30%,
+            50%,
+            70%,
+            90% {
+                -webkit-transform: translate3d(-10px, 0, 0);
+                transform: translate3d(-10px, 0, 0);
+            }
+
+            20%,
+            40%,
+            60%,
+            80% {
+                -webkit-transform: translate3d(10px, 0, 0);
+                transform: translate3d(10px, 0, 0);
+            }
+        }
+
+        @keyframes shake {
+
+            from,
+            to {
+                -webkit-transform: translate3d(0, 0, 0);
+                transform: translate3d(0, 0, 0);
+            }
+
+            10%,
+            30%,
+            50%,
+            70%,
+            90% {
+                -webkit-transform: translate3d(-10px, 0, 0);
+                transform: translate3d(-10px, 0, 0);
+            }
+
+            20%,
+            40%,
+            60%,
+            80% {
+                -webkit-transform: translate3d(10px, 0, 0);
+                transform: translate3d(10px, 0, 0);
+            }
+        }
+
+        .shake {
+            -webkit-animation-name: shake;
+            animation-name: shake;
+        }
+
+        .loadingBg {
+            width: 100%;
+            height: 100%;
+            background-color: #000;
+            z-index: 14000;
+            position: absolute;
+            left: 0%;
+            top: 0%;
+        }
+
+        #loading {
+            z-index: 15000;
+            width: 160px;
+            height: 157px;
+            position: absolute;
+            top: 0;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            margin: auto;
+            transform: scale(0.7);
+        }
+
+        @keyframes rod {
+            0% {
+                transform: rotateZ(0deg);
+            }
+
+            100% {
+                transform: rotateZ(360deg);
+            }
+        }
+
+        .rodimg {
+            animation: rod 1s infinite linear;
+        }
+
+        .center {
+            position: absolute;
+            top: 0;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            margin: auto;
+        }
+
+        .pai {
+            z-index: 15001;
+            background: url(http://syzy.womai.la/tthaibei/cache/v3.4/pai0.png) no-repeat;
+            width: 93px;
+            height: 100px;
+            overflow: hidden;
+            transform: rotateY(90deg);
+        }
+    </style>
+</head>
+
+<body class="black">
+    <div type="text" class="club" data-room="" id="copyList"></div>
+    <div id="share_url" style="display:none"></div>
+    <!--自己的俱乐部Id-->
+    <div id="groupId" style="display:none"></div>
+    <!--前端客户唯一ID--前端发送这个内容给后端，，后端通过数据库唯一查询返回客户信息给前端-->
+    <div id="un" style="display:none">o_ZhU1NtQnR0dh786UTSOwuvOR8I</div>
+    <!--房间ID--显示大厅的时候是空- 进入房间的时候才有数字-->
+    <div id="room" style="display:none"></div>
+    <div id="game_type" style="display:none"></div>
+    <!--//图片，js资源地址-->
+    <div id="assets" style="display:none">http://syzy.womai.la/tthaibei/cache/v3.4</div>
+    <!--//图片，js资源地址-->
+    <div id="path" style="display:none">res.ed010z.cn/chess/p2/</div>
+    <!--//回调IP+端口 -->
+    <div id="host" style="display:none"></div>
+    <!--//游戏名称-->
+    <div id="title" style="display:none"></div>
+    <!--//房卡包编号-->
+    <div id="cardno" style="display:none"></div>
+    <!--//邀请函编号-->
+    <div id="invitation" style="display:none"></div>
+    <!--//卡牌皮肤编号-->
+    <div id="skinno" style="display:none"></div>
+    <!--//头像皮肤编号-->
+    <div id="headno" style="display:none"></div>
+    <!--//代理商编号-->
+    <div id="site" style="display:none"></div>
+    <!--//代理商秘钥  验证一下是否合法-->
+    <div id="lkey" style="display:none">b04a3Yqv0LKqSj9f/2FhMnnjvpGTaQfdrcO7HiuI5j5w64lRkg</div>
+    <!--//散图地址-->
+    <div id="comp" style="display:none">comp5</div>
+    <!--//图集地址-->
+    <div id="atlas" style="display:none">/res/atlas15</div>
+    <!--//声音地址-->
+    <div id="sounds" style="display:none">/sounds/</div>
+    <!--//json-->
+    <div id="json" style="display:none">/json1</div>
+    <script type="text/javascript">
+
+        var enter_url=localStorage.getItem('enter_url')
+        var wwid=localStorage.getItem("wwid")
+
+        if(wwid&&enter_url)
+        {
+            localStorage.removeItem('enter_url')
+            window.location.href=decodeURIComponent(enter_url)
+        }
+
+        var room_id=DynLoading.getUrlParam('room')
+        document.getElementById('room').innerHTML=room_id
+
+        var vdt=getQueryVariable('dt')
+        window.vdt=vdt
+
+        var obj = DynLoading.hall(BaseUrl + '/home1/index?room_id='+room_id+'&dt='+vdt);
+        
+        if(obj.result != 0){
+
+            if(!enter_url)
+            {
+                localStorage.setItem('enter_url',encodeURIComponent(window.location.href))
+            }
+
+            var return_url = window.location.href;
+            console.log(return_url);
+            window.location.href = '/site/login.html?return_url=' + window.location.href + '?t=' + obj.data.t;
+            
+        }
+
+        document.getElementById('site').innerHTML=obj.data.dt
+        document.getElementById('title').innerHTML=obj.data.title
+        document.getElementById('host').innerHTML=obj.data.ws
+        document.getElementById('game_type').innerHTML=obj.data.game_type
+
+
+        var pass_cmds=JSON.parse(obj.data.pass_cmds)
+
+        var globalData={
+            roomNumber:obj.data.room_id,
+            hallName:obj.data.title
+        }
+
+        function onBridgeReady() {
+            WeixinJSBridge.call('hideOptionMenu');
+        }
+
+        if (typeof WeixinJSBridge == "undefined") {
+            if (document.addEventListener) {
+                document.addEventListener('WeixinJSBridgeReady', onBridgeReady, false);
+            } else if (document.attachEvent) {
+                document.attachEvent('WeixinJSBridgeReady', onBridgeReady);
+                document.attachEvent('onWeixinJSBridgeReady', onBridgeReady);
+            }
+        } else {
+            onBridgeReady();
+        }
+        var errormsg = "";
+        var count = 0;
+        var maxcount = 7;
+        var loadingInterval;
+        function showloading(flag) {
+            var load = document.getElementById("loading");
+            if (flag) {
+                if (loadingInterval) clearInterval(loadingInterval);
+                load.style.display = "block";
+                var pai = document.getElementsByClassName("pai")[0];
+                var startDeg = 90;
+                loadingInterval = setInterval(function () {
+                    if (startDeg === 90) {
+                        pai.style['background-position'] = "0px,0px";
+                    }
+                    if (startDeg === 270) {
+                        pai.style['background-position'] = "-93px,0px";
+                    }
+                    if (startDeg === 450) {
+                        pai.style['background-position'] = "-199px,0px";
+                    }
+                    if (startDeg === 630) {
+                        pai.style['background-position'] = "-295px,0px";
+                    }
+                    if (startDeg === 810) {
+                        startDeg = 80;
+                    }
+                    startDeg += 5;
+                    pai.style.transform = " rotateY(" + startDeg + "deg)";
+                }, 20);
+            } else {
+                load.style.display = "none";
+                if (loadingInterval) clearInterval(loadingInterval);
+            }
+
+        }
+        showloading(true);
+    </script>
+    <script src="http://syzy.womai.la/tthaibei/code1_hex.js"></script>
+    <script>
+        (function (doc, win) {
+            var docEl = doc.documentElement,
+                resizeEvt = 'orientationchange' in window ? 'orientationchange' : 'resize',
+                recalc = function () {
+                    var clientWidth = docEl.clientWidth;
+                    if (!clientWidth) return;
+                    if (clientWidth >= 640) {
+                        docEl.style.fontSize = '100px';
+                    } else {
+                        docEl.style.fontSize = 100 * (clientWidth / 640) + 'px';
+                    }
+                };
+            if (!doc.addEventListener) return;
+            win.addEventListener(resizeEvt, recalc, false);
+            doc.addEventListener('DOMContentLoaded', recalc, false);
+            recalc();
+        })(document, window);
+        function quitaccount() {
+            console.log("quit");
+            window.location.href = "/quit.php";
+        }
+        window.onload = function () {
+            function closeDialog() {
+                $('#dialog').hide();
+            }
+            var copyData = $("#title").html();
+            var clipboard = new Clipboard('#btn', {
+                // 点击copy按钮，直接通过text直接返回复印的内容
+                text: function () {
+                    if ($("#share_url").html() == "") {
+                        return copyData + "：" + window.location.href;
+                    } else {
+                        return copyData + "：" + $("#share_url").html();
+                    }
+                }
+            });
+            clipboard.on('success', function (e) {
+                console.log(e);
+                console.log("显示");
+                CommonUtil.showAlert("已复制到剪贴板");
+                var url=e.text.indexOf('http');
+                url=e.text.slice(url);
+                makeQrCode(url);
+            });
+
+            clipboard.on('error', function (e) {
+                console.log(e);
+            });
+
+            var clipboard_club = new Clipboard('.btn_club', {
+                // 点击copy按钮，直接通过text直接返回复印的内容
+                text: function () {
+                    return $("#groupId").html();
+                }
+            });
+            clipboard_club.on('success', function (e) {
+                console.log(e);
+                console.log("显示");
+                CommonUtil.showAlert("已复制到剪贴板");
+            });
+
+            clipboard_club.on('error', function (e) {
+                console.log(e);
+            });
+            var club = new Clipboard('.club', {
+                // 点击copy按钮，直接通过text直接返回复印的内容
+                text: function () {
+                    return $("#copyList").attr("data-room");
+                }
+            });
+            club.on('success', function (e) {
+                console.log(e);
+                console.log("显示");
+                CommonUtil.showAlert("已复制到剪贴板");
+                $("#copyList").hide();
+                var game = GameManager.getInstance().game;
+                game.Tweenh(game.ownlist.clubPanel.getChildByName("copyPanel"), false);
+            });
+
+            club.on('error', function (e) {
+                console.log(e);
+            });
+            var club = new Clipboard('.club', {
+                // 点击copy按钮，直接通过text直接返回复印的内容
+                text: function () {
+                    return $("#copyList").attr("data-room");
+                }
+            });
+            club.on('success', function (e) {
+                console.log(e);
+                console.log("显示");
+                CommonUtil.showAlert("已复制到剪贴板");
+                $("#copyList").hide();
+                var game = GameManager.getInstance().game;
+                game.Tweenh(game.ownlist.clubPanel.getChildByName("copyPanel"), false);
+            });
+
+            club.on('error', function (e) {
+                console.log(e);
+                $('#dialog').show();
+                var game = GameManager.getInstance().game;
+                game.Tweenh(game.ownlist.clubPanel.getChildByName("copyPanel"), false);
+            });
+            var clipboard2 = new Clipboard('#room_btn', {
+                // 点击copy按钮，直接通过text直接返回复印的内容
+                text: function () {
+                    return $("#room_btn").attr("data-room");
+                }
+            });
+            clipboard2.on('success', function (e) {
+                console.log(e);
+                console.log("显示");
+                //CommonUtil.showAlert("已复制到剪贴板");
+                var url=e.text.indexOf('http')
+                url=e.text.slice(url)
+                makeQrCode(url)
+            });
+
+            clipboard2.on('error', function (e) {
+                console.log(e);
+            });
+        }
+
+    </script>
+    <script src="http://syzy.womai.la/tthaibei/qrcode/jquery.qrcode.min.js" charset="utf-8"></script>
+    <script src="http://syzy.womai.la/tthaibei/qrcode/qrcode.js" charset="utf-8"></script>
+</body>
+
+</html>

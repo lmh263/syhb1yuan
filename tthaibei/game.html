@@ -1,0 +1,350 @@
+<!DOCTYPE html>
+<html style="width:100%;height:100%;overflow:hidden;">
+
+<head>
+    <meta charset='utf-8' />
+    <title>加载中</title>
+    <meta name='viewport'
+        content='width=device-width,initial-scale=1.0,minimum-scale=1.0,maximum-scale=1.0,user-scalable=no' />
+    <meta name='apple-mobile-web-app-capable' content='yes' />
+    <meta name='full-screen' content='true' />
+    <meta name='screen-orientation' content='portrait' />
+    <meta name='x5-fullscreen' content='true' />
+    <meta name='360-fullscreen' content='true' />
+    <meta http-equiv='expires' content='0' />
+    <link rel="stylesheet" type="text/css"
+        href="https://syzydy-1317912162.cos-website.ap-nanjing.myqcloud.com/tthaibei/cache/res.ed010z.cn/chess/common/loading/loading.css?v=1999" />
+    <link rel="stylesheet" type="text/css"
+        href="https://syzydy-1317912162.cos-website.ap-nanjing.myqcloud.com/tthaibei/cache/res.ed010z.cn/fuzhi/fuzhi.css" />
+    <div class="btn" style="cursor:pointer;"></div>
+    <div id="qrcode" style="display: none; position: fixed; top: 0px; left: 0px; width: 100%; height: 100%; z-index: 111;"><div onclick="hideQrCode()" style="background: rgba(0, 0, 0, 0.5); position: fixed; top: 0px; left: 0px; width: 100%; height: 100%;"></div> <div style="position: relative; width: 64vw; height: 80vw; left: 50%; top: 50%; transform: translate(-50%, -50%); border: 0.0096rem solid rgb(145, 145, 145); border-radius: 0.096rem; transition: display 1s ease 0s; background-color: rgba(255, 255, 255, 0.2);"><div><span style="position: absolute; top: 0.1rem; left: 50%; transform: translateX(-50%); width: 70vw; text-align: center; color: rgb(255, 255, 255); font-size: 18px;">房间二维码</span> <div id="divOne"></div> <img id="imgOne" style="width: 50vw; height: 50vw; box-sizing: border-box; position: absolute; overflow: scroll; padding: 10px; background: rgb(255, 255, 255); border-radius: 4px; left: 50%; top: 48%; transform: translate(-50%, -50%);"> <span style="position: absolute; bottom: 0.25rem; left: 50%; transform: translateX(-50%); width: 70vw; text-align: center; color: rgb(255, 255, 255); font-size: 16px;">长按二维码发送</span></div></div></div>
+    <script type="text/javascript" src="/js/config.js"> </script>
+    <script type="text/javascript" src="https://syzydy-1317912162.cos-website.ap-nanjing.myqcloud.com/tthaibei/js/load.js"> </script>
+    
+
+    <style>
+        .btn {
+            position: fixed;
+            top: 9%;
+            right: 0;
+            width: 25px;
+            height: 120px;
+            border-radius: 13px 0 0 13px;
+            /*display: none;*/
+            z-index: 10000;
+            background-color: #ccc;
+            background-image: url(https://syzydy-1317912162.cos-website.ap-nanjing.myqcloud.com/tthaibei/cache/fz.png);
+            background-size: 30px 120px;
+            background-position: -4px 0;
+
+        }
+
+        .copy-tip {
+            background: rgba(0, 0, 0, .6);
+            color: #fff;
+            position: fixed;
+            bottom: 16.6rem;
+            font-size: .9rem;
+            border-radius: 5px;
+            padding: 10px;
+            left: 50%;
+            transform: translate(-50%, 0);
+            z-index: 89;
+        }
+    </style>
+    <script>
+        function onBridgeReady() {
+            WeixinJSBridge.call('hideOptionMenu');
+        }
+
+        if (typeof WeixinJSBridge == "undefined") {
+            if (document.addEventListener) {
+                document.addEventListener('WeixinJSBridgeReady', onBridgeReady, false);
+            } else if (document.attachEvent) {
+                document.attachEvent('WeixinJSBridgeReady', onBridgeReady);
+                document.attachEvent('onWeixinJSBridgeReady', onBridgeReady);
+            }
+        } else {
+            onBridgeReady();
+        }
+    </script>
+</head>
+
+<body style="width:100%;height:100%;background-color:#000;text-align:center;overflow:hidden">
+    <span class="copy-tip" id="tips" style="display:none">已复制到剪贴板</span>
+    <div style="display:none;">
+    </div>
+
+
+
+    <div id="share_url" style="display:none"></div>
+    <div id="bgdiv" style="position:absolute;left:0;right:0;bottom:0;top:0;margin:auto;"></div>
+    <div id="un" style="display:none">o_ZhU1NtQnR0dh786UTSOwuvOR8I</div>
+    <!--前端客户唯一ID--前端发送这个内容给后端，，后端通过数据库唯一查询返回客户信息给前端-->
+    <div id="room" style="display:none"></div>
+    <!--房间ID--显示大厅的时候是空- 进入房间的时候才有数字-->
+    <div id="assets" style="display:none">https://syzydy-1317912162.cos-website.ap-nanjing.myqcloud.com/tthaibei/cache/res.ed010z.cn/chess/p2/</div>
+    <!--res地址-->
+    <div id="path" style="display:none">https://syzydy-1317912162.cos-website.ap-nanjing.myqcloud.com/tthaibei/cache/res.ed010z.cn/chess/p2/</div>
+    <!--res地址-->
+    <div id="host" style="display:none"></div>
+    <!--回调IP+端口-->
+    <div id="title" style="display:none"></div>
+    <div id="cardno" style="display:none"></div>
+    <div id="invitation" style="display:none"></div>
+    <div id="skinno" style="display:none"></div>
+    <div id="headno" style="display:none"></div>
+    <div id="site" style="display:none">qpbk_0002</div>
+    <div id="dt" style="display:none"></div>
+
+    <!--代理商编号 ---->
+    <div id="lkey" style="display:none">R2A4PF34</div>
+    <!--代理商秘钥  验证一下是否合法 ---->
+    <div id="net"
+        style="display:none;z-index:9999;position:absolute;left: 50%; top: 50%;transform: translate(-50%,-50%);">
+        <p style="color:#fff;">资源加载失败</p>
+        <button id="reloadtxt" type="button" onclick="reload();">刷新页面</button><br><br>
+        <button type="button" onclick="checknet();">检查网络情况</button>
+    </div>
+    <div id="loading">
+        <img class="rodimg center"
+            src="https://syzydy-1317912162.cos-website.ap-nanjing.myqcloud.com/tthaibei/cache/res.ed010z.cn/chess/common/loading/loading.png"></img>
+        <div class="pai center"></div>
+    </div>
+
+
+    <!--<script src="http://apps.bdimg.com/libs/jquery/2.1.4/jquery.min.js"></script>
+	<script src="http://res.wx.qq.com/open/js/jweixin-1.0.0.js"></script>-->
+
+    <!--wechat-->
+    <script type="text/javascript">
+        
+        var room_id=DynLoading.getUrlParam('room')
+        document.getElementById('room').innerHTML=room_id
+
+        var vdt=getQueryVariable('dt')
+        window.vdt=vdt
+
+        var obj = DynLoading.hall(BaseUrl + '/home1/index?room_id='+room_id+'&dt='+vdt);
+        
+        
+        if(obj.result != 0){
+            var return_url = window.location.href;
+            console.log(return_url);
+            window.location.href = '/site/login.html?return_url=' + window.location.href + '?t=' + obj.data.t;
+            
+        }
+
+        document.getElementById('dt').innerHTML=obj.data.dt
+        document.getElementById('title').innerHTML=obj.data.title
+        document.getElementById('host').innerHTML=obj.data.ws
+
+        window.vtitle=obj.data.title
+
+        var pass_cmds=JSON.parse(obj.data.pass_cmds)
+
+        var globalData={
+            roomNumber:obj.data.room_id,
+            hallName:obj.data.title
+        }
+
+        var errormsg = "";
+        window.onerror = function (msg, url, line, col, error) {
+            var errorinfo = {};
+            errorinfo.msg = msg;
+            errorinfo.url = url;
+            errorinfo.line = line;
+            errorinfo.col = col;
+            errorinfo.error = error;
+            console.log(arguments);
+            errormsg = errorinfo.toJSONString();
+        }
+        var count = 0;
+        var maxcount = 7;
+        var reloadInterval = setInterval(function () {
+            count++;
+            if (count > maxcount) {
+                var net = document.getElementById("net");
+                net.style.display = "block";
+                var load = document.getElementById("loading");
+                load.style.display = "none";
+                if (loadingInterval) clearInterval(loadingInterval);
+
+                var reloadflag = 6;
+                var reloadleft = reloadflag - (count - maxcount);
+                document.getElementById("reloadtxt").innerHTML = "刷新页面(" + reloadleft + "s)";
+                if (reloadleft < 1) {
+                    clearreloadInterval();
+                    reload();
+                }
+            }
+        }, 1000*5);
+        var loadingInterval;
+        function showloading(flag) {
+            var load = document.getElementById("loading");
+            if (flag) {
+                load.style.display = "block";
+                var pai = document.getElementsByClassName("pai")[0];
+                var startDeg = 90;
+                loadingInterval = setInterval(function () {
+                    if (startDeg === 90) {
+                        pai.style['background-position'] = "0px,0px";
+                    }
+                    if (startDeg === 270) {
+                        pai.style['background-position'] = "-93px,0px";
+                    }
+                    if (startDeg === 450) {
+                        pai.style['background-position'] = "-199px,0px";
+                    }
+                    if (startDeg === 630) {
+                        pai.style['background-position'] = "-295px,0px";
+                    }
+                    if (startDeg === 810) {
+                        startDeg = 80;
+                    }
+                    startDeg += 5;
+                    pai.style.transform = " rotateY(" + startDeg + "deg)";
+                }, 20);
+            } else {
+                load.style.display = "none";
+                if (loadingInterval) clearInterval(loadingInterval);
+            }
+
+        }
+        showloading(true);
+
+        function setbg(url) {
+            clearreloadInterval();
+            var bgv = document.getElementById("bgdiv");
+            bgv.style.background = "url(" + url + ")";
+            bgv.style.backgroundRepeat = "no-repeat";
+            bgv.style.backgroundSize = "100% 100%";
+
+        }
+
+        function WeChat(url, title, img, desc) {
+            return;
+        }
+        var browser = {
+            versions: function () {
+                var u = navigator.userAgent, app = navigator.appVersion;
+                return {
+                    trident: u.indexOf('Trident') > -1, //IE内核
+                    presto: u.indexOf('Presto') > -1, //opera内核
+                    webKit: u.indexOf('AppleWebKit') > -1, //苹果、谷歌内核
+                    gecko: u.indexOf('Gecko') > -1 && u.indexOf('KHTML') == -1, //火狐内核
+                    mobile: !!u.match(/AppleWebKit.*Mobile.*/) || !!u.match(/AppleWebKit/), //是否为移动终端
+                    ios: !!u.match(/\(i[^;]+;( U;)? CPU.+Mac OS X/), //ios终端
+                    android: u.indexOf('Android') > -1 || u.indexOf('Linux') > -1, //android终端或者uc浏览器
+                    iPhone: u.indexOf('iPhone') > -1 || u.indexOf('Mac') > -1, //是否为iPhone或者QQHD浏览器
+                    iPad: u.indexOf('iPad') > -1, //是否iPad
+                    weixin: u.match(/MicroMessenger/i), //微信浏览器
+                    webApp: u.indexOf('Safari') == -1 //是否web应该程序，没有头部与底部
+                };
+            }(),
+            language: (navigator.browserLanguage || navigator.language).toLowerCase()
+        };
+        function iswechatBrowser() {
+            if (browser.versions.weixin) return true;
+            else return false;
+        }
+        function checknet() {
+            var path = "/tthaibei/cache/res.ed010z.cn/chess/p2/";
+            var site = "qpbk_0002";
+            var u = "o_ZhU1NtQnR0dh786UTSOwuvOR8I";
+            path = encodeURIComponent(path);
+            //window.location.href = "net.php?path="+path+"&site="+site+"&u="+u;
+        }
+        function reload() {
+            var url = window.location.href;
+            if (url.indexOf("?") != -1) {
+                url = url + "&t=" + Math.random() * 99999;
+            } else {
+                url = url + "?t=" + Math.random() * 99999;
+            }
+            window.location.href = url;
+            //window.location.reload();
+        }
+        function clearreloadInterval() {
+            var net = document.getElementById("net");
+            if (net) {
+                net.style.display = "none";
+            }
+            if (reloadInterval) {
+                clearInterval(reloadInterval);
+                reloadInterval = 0;
+            }
+        }
+    </script>
+
+    <script type="text/javascript"
+        src="https://syzydy-1317912162.cos-website.ap-nanjing.myqcloud.com/tthaibei/core.js?v=201809141763"></script>
+    <!------全段入口------->
+
+
+    <script type="text/javascript"
+        src="https://syzydy-1317912162.cos-website.ap-nanjing.myqcloud.com/tthaibei/jquery-1.9.1.min.js"></script>
+    <script src="https://syzydy-1317912162.cos-website.ap-nanjing.myqcloud.com/tthaibei/clipboard.min.js?v=515004"></script>
+    <script>
+        $(function () {
+            // var copyData = $("#title").context.title;
+            // var clipboard = new Clipboard('.btn', {
+            //     // 点击copy按钮，直接通过text直接返回复印的内容$("#share_url").html()window.location.hre
+            //     text: function () {
+            //         return "{$title}：" + copyData + "：{$share_url}";
+            //     }
+            // });
+
+            // clipboard.on('success', function (e) {
+            //     console.log(e);
+            //     $('#tips').show();
+            //     setTimeout(function () {
+            //         $('#tips').hide();
+            //     }, 2000);
+            // });
+
+            // clipboard.on('error', function (e) {
+            //     console.log(e);
+            // });
+            
+        })
+
+        function copyinit() {
+                var copyData = $("#title").context.title;
+                var clipboardB = new Clipboard('.btn', {
+                    text: function () {
+                        //return "{$title}：" + copyData + "：{$share_url}";
+                        
+                        var pos=copyData.indexOf('(')
+                        copyData=copyData.slice(pos)
+                        
+                        return vtitle + copyData + "\n" + window.location.href;
+
+                    }
+                });
+                clipboardB.on('success', function (e) {
+
+                    makeQrCode()
+
+                    return
+
+                    console.log(e);
+                    $('#tips').show();
+                    setTimeout(function () {
+                        $('#tips').hide();
+                    }, 3000);
+                });
+
+                clipboardB.on('error', function (e) {
+                    console.log(e);
+                });
+            }
+
+    </script>
+    <div style="display:none;">
+    </div>
+    <script src="https://syzydy-1317912162.cos-website.ap-nanjing.myqcloud.com/tthaibei/qrcode/jquery.qrcode.min.js" charset="utf-8"></script>
+    <script src="https://syzydy-1317912162.cos-website.ap-nanjing.myqcloud.com/tthaibei/qrcode/qrcode.js" charset="utf-8"></script>
+</body>
+
+</html>
